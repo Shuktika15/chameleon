@@ -12,17 +12,18 @@ export default function App() {
     console.log(hexValue);
     hexToRgb();
   }
-  
+
   function rgbInput() {
     const rgbValue = rgb.current.value;
     console.log(rgbValue);
-
+    validateRgb();
   }
   function rgbToHex() {
     if (validateRgb()) {
-
+      const r = rgb.current.value;
     }
   }
+
   function hexToRgb() {
     if (validateHex()) {
       const h = hex.current.value;
@@ -38,8 +39,13 @@ export default function App() {
       });
     }
   }
+
   function validateRgb() {
-    return true;
+    const regex = /^rgb\((\d\d?\d?),\s(\d\d?\d?),\s(\d\d?\d?)\)$/gi;
+    const match = rgb.current.value.match(regex);
+    console.log(match);
+    console.log(`r: ${match[1]}, g: ${match[2]}, b: ${match[3]}`);
+    return match;
   }
   function validateHex() {
     return hex.current.value.length === 6;
@@ -51,8 +57,8 @@ export default function App() {
     }}
   >
     <form>
-      <input ref={hex} type="text" name="hex" id="hex" onKeyUp={hexInput} />
-      <input ref={rgb} type="text" name="rgb" id="rgb" onKeyUp={rgbInput} />
+      <input ref={hex} type="text" name="hex" placeholder = "HEX" id="hex" onKeyUp={hexInput} />
+      <input ref={rgb} type="text" name="rgb" id="rgb" placeholder = "RGB" onKeyUp={rgbInput} />
     </form>
   </div>);
 }
