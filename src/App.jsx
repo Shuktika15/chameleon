@@ -3,53 +3,53 @@ import logo from './logo.svg'
 import './App.css'
 
 export default function App() {
-  const hex = useRef();
-  const rgb = useRef();
+  const rgbPattern = /^rgb\((\d\d?\d?),\s*(\d\d?\d?),\s*(\d\d?\d?)\)$/i;
+  const hexPattern = /^#[a-f0-9]{6}$/i;
+  const hexInput = useRef();
+  const rgbInput = useRef();
   const [backgroundColor, setBackgroundColor] = useState('ffffff');
 
-  function hexInput() {
-    const hexValue = hex.current.value;
-    console.log(hexValue);
-    hexToRgb();
+  function hexChange() {
+    const hex = hexInput.current.value;
+    hexToRgb(hex);
   }
 
-  function rgbInput() {
-    const rgbValue = rgb.current.value;
-    console.log(rgbValue);
-    validateRgb();
+  function rgbChange() {
+    const rgb = rgbInput.current.value;
+    rgbToHex(rgb);
   }
-  function rgbToHex() {
-    if (validateRgb()) {
-      const r = rgb.current.value;
+
+  function rgbToHex(rgb) {
+    if (validateRgb(rgb)) {
+      const match = rgb.match(rgbPattern);
+      const r = parseInt(match[1]);
+      const g = parseInt(match[2]);
+      const b = parseInt(match[3]);
+      const value = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
+      hexInput.current.value = value;
+      setBackgroundColor(_ => value);
     }
   }
 
-  function hexToRgb() {
-    if (validateHex()) {
-      const h = hex.current.value;
-      const red = h.substring(0, 2);
-      const green = h.substring(2, 4);
-      const blue = h.substring(4, 6);
-
+  function hexToRgb(hex) {
+    if (validateHex(hex)) {
+      const red = hex.substring(1, 3);
+      const green = hex.substring(3, 5);
+      const blue = hex.substring(5, 7);
       const value = `rgb(${parseInt(red, 16)}, ${parseInt(green, 16)}, ${parseInt(blue, 16)})`;
-      console.log(value);
-      rgb.current.value = value;
-      setBackgroundColor((state) => {
-        return value;
-      });
+      rgbInput.current.value = value;
+      setBackgroundColor(_ => value);
     }
   }
 
-  function validateRgb() {
-    const regex = /^rgb\((\d\d?\d?),\s(\d\d?\d?),\s(\d\d?\d?)\)$/gi;
-    const match = rgb.current.value.match(regex);
-    console.log(match);
-    console.log(`r: ${match[1]}, g: ${match[2]}, b: ${match[3]}`);
-    return match;
+  function validateRgb(rgb) {
+    return rgbPattern.test(rgb);
   }
-  function validateHex() {
-    return hex.current.value.length === 6;
+
+  function validateHex(hex) {
+    return hexPattern.test(hex);
   }
+
   return (<div
     className='App'
     style={{
@@ -57,8 +57,8 @@ export default function App() {
     }}
   >
     <form>
-      <input ref={hex} type="text" name="hex" placeholder = "HEX" id="hex" onKeyUp={hexInput} />
-      <input ref={rgb} type="text" name="rgb" id="rgb" placeholder = "RGB" onKeyUp={rgbInput} />
+      <input ref={hexInput} type="text" name="hex" placeholder="HEX" id="hex" onKeyUp={hexChange} />
+      <input ref={rgbInput} type="text" name="rgb" id="rgb" placeholder="RGB" onKeyUp={rgbChange} />
     </form>
   </div>);
 }
