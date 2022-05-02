@@ -3,7 +3,7 @@ import logo from './logo.svg'
 import './App.css'
 
 export default function App() {
-  const rgbPattern = /^rgb\((\d\d?\d?),\s*(\d\d?\d?),\s*(\d\d?\d?)\)$/i;
+  const rgbPattern = /^rgb\((\d|\d\d|[0-2][0-5][0-5]),\s*(\d|\d\d|[0-2][0-5][0-5]),\s*(\d|\d\d|[0-2][0-5][0-5])\)$/i;
   const hexPattern = /^#[a-f0-9]{6}$/i;
   const hexInput = useRef();
   const rgbInput = useRef();
