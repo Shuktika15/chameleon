@@ -26,4 +26,5 @@ input[type="text"] {
   padding: 1rem;
   margin: 1rem;
   border-bottom: dashed black;
+  font-size: large;
 }
